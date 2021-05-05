@@ -1,9 +1,7 @@
 const apiRouter = require('express').Router();
-// const { handle405s, handle404s } = require('../errors');
-
+const accountsRouter = require('./accountsRouter');
 const readingsRouter = require('./readingsRouter');
 apiRouter.use('/readings', readingsRouter);
-
-// apiRouter.route('/*').all(handle404s);
+apiRouter.use('/accounts', accountsRouter);
 
 module.exports = apiRouter;
