@@ -25,11 +25,7 @@ module.exports = [
     account_id: '6f98771c-00d8-4a3d-a179-d5e3b028b54e',
     reading: 6705
   },
-  {
-    meter_reading_id: '0966665b-bb10-4f94-b903-bd0fb38762d6',
-    account_id: '5e345cff-fb8f-4ed6-a961-8818a65392c9',
-    reading: 708
-  },
+
   {
     meter_reading_id: 'f2c7b7d2-44d1-4a2d-b2d3-5a7351900fb5',
     account_id: '7353476a-1d35-4391-a532-47862fb9069d',

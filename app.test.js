@@ -224,7 +224,7 @@ describe('/readings', () => {
         .get('/api/readings')
         .expect(200)
         .then(({ body }) => {
-          expect(body.readings).toHaveLength(7);
+          expect(body.readings).toHaveLength(6);
           expect(body.readings[0]).toMatchObject({
             account_id: expect.any(String),
             meter_reading_id: expect.any(String),
@@ -247,6 +247,22 @@ describe('/readings', () => {
             reading: expect.any(String)
           });
           expect(body.readings).toBeSortedBy('account_id', {
+            descending: false
+          });
+        });
+    });
+    test('status: 200, should accept a query sort by reading', () => {
+      return request(app)
+        .get('/api/readings?sort_by=reading')
+        .expect(200)
+        .then(({ body }) => {
+          console.log(body.readings);
+          expect(body.readings[0]).toMatchObject({
+            account_id: expect.any(String),
+            meter_reading_id: expect.any(String),
+            reading: expect.any(String)
+          });
+          expect(body.readings).toBeSortedBy('reading', {
             descending: false
           });
         });
