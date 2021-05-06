@@ -5,7 +5,32 @@ const dbConnection = require('./db/dbConnection');
 afterAll(() => dbConnection.destroy());
 
 beforeEach(() => dbConnection.seed.run());
-
+describe('/api', () => {
+  it('status 404: it returns an error if path does not exist', () => {
+    const methods = ['get', 'post', 'patch', 'put', 'delete'];
+    const methodPromises = methods.map((method) => {
+      return request(app)
+        [method]('/api/hello')
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('Not found');
+        });
+    });
+    return Promise.all(methodPromises);
+  });
+});
+describe('GET', () => {
+  it('status:200, returns a JSON file with all the available endpoints', () => {
+    return request(app)
+      .get('/api')
+      .expect(200)
+      .then(({ text }) => {
+        const parsed = JSON.parse(text);
+        expect(parsed).toHaveProperty('GET /api');
+        expect(parsed).toHaveProperty('GET /api/accounts');
+      });
+  });
+});
 describe('/readings', () => {
   describe('POST', () => {
     test('status: 201, should post a meter reading CSV', () => {
@@ -444,14 +469,12 @@ describe('/accounts', () => {
             expect(msg).toBe('Invalid entry');
           });
       });
-      test.skip('should return 404 if account ID is not found', () => {
+      test('should return 404 if account ID is not found', () => {
         return request(app)
           .patch('/api/accounts/5555')
           .expect(404)
-          .then(({ body }) => {
-            expect(msg).toBe(
-              'Account ID 5e345ctestff-fb8f-4ed6-a961-8818a65392c9 not found'
-            );
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('Account ID 5555 not found');
           });
       });
     });

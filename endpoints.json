@@ -1,0 +1,94 @@
+{
+  "GET /api": {
+ "description": "serves up a json representation of all the available endpoints of the api"
+  },
+  "GET /api/accounts": {
+    "description": "serves an array of all accounts",
+    "queries": ["sort_by", "order"],
+    "exampleResponse": {
+      "accounts": [
+        {
+          "account_id": "fffff9990006ksksk",
+          "first_name": "testname",
+          "surname": "testsurname",
+          "email": "testmail@gmail.com"
+        }
+      ]
+    }
+  },
+
+  "GET /api/readings": {
+    "description": "serves an array of all meter readings",
+    "queries": ["sort_by", "order"],
+    "exampleResponse": {
+      "readings": [
+        {
+          "account_id": "kkkll087djdl99",
+          "meter_reading_id": "lllkid0d0d99!",
+          "reading": 9998
+        }
+      ]
+    }
+  },
+
+  "POST /api/readings": {
+    "description": "accepts an array of objects each with a key of data containing an array of meter readings data",
+    "exampleRequestBody": 
+      [
+          {
+            "data": ["meter_reading_id", "account_id", "reading"]
+          },
+
+          {
+            "data": [
+              "6a68108b-9ec2-4020-9b54-9fbd319c59f6",
+              "6f9ff8771testc-00d8-4a3d-a179-d5e3b028b54e",
+              6705
+            ]
+          },
+           {
+            "data": [
+              "0966665b-bb10-4f94-b903-bd0fb38762d6",
+              "5e345cff-fb8f-4ed6-a961-8818a65392c9",
+              7084
+            ]
+          }
+        ]
+    },
+    "exampleResponse": {
+      "invalidSubmissions": [
+              {
+                "meter_reading_id": "6a68108b-9ec2-4020-9b54-9fbd319c59f6",
+                "account_id": "6f9ff8771testc-00d8-4a3d-a179-d5e3b028b54e",
+                "reading": 6705
+              }
+            ],
+            "validSubmissions": [
+              {
+                "meter_reading_id": "0966665b-bb10-4f94-b903-bd0fb38762d6",
+                "account_id": "5e345cff-fb8f-4ed6-a961-8818a65392c9",
+                "reading": 7084
+              }
+            ]
+    },
+  
+
+  "PATCH /api/accounts/:account_id": {
+    "description": "can update the first_name, surname or email fields of each account by id",
+    "exampleRequestBody": {
+      "email": "newtestemail@gmail.com"
+
+    },
+    "exampleResponse": {
+      "account":
+        {
+          "first_name": "testname",
+          "email": "newtestemail@gmail.com",
+          "surname": "testsurname"
+
+        }
+
+    }
+  }
+
+}

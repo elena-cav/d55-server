@@ -13,11 +13,11 @@ exports.getAccounts = (req, res, next) => {
 };
 
 exports.patchAccount = (req, res, next) => {
-  Promise.all([
-    updateAccount(req.body, req.params),
-    checkAccountExists(req.params)
-  ])
-    .then(([account]) => {
+  checkAccountExists(req.params)
+    .then(() => {
+      return updateAccount(req.body, req.params);
+    })
+    .then((account) => {
       res.status(200).send({ account });
     })
     .catch((err) => next(err));

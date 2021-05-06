@@ -1,7 +1,6 @@
 const dbConnection = require('../db/dbConnection');
 
 exports.checkAccountExists = ({ account_id }) => {
-  console.log('in hereee');
   return dbConnection
     .select('*')
     .from('accounts')
