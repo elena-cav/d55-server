@@ -30,8 +30,7 @@ exports.sendReadings = (readings) => {
             invalidSubmissions: invalid
           };
         });
-    })
-    .catch((err) => console.log(err));
+    });
 };
 
 exports.fetchReadings = ({ sort_by, order }) => {

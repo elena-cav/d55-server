@@ -3,7 +3,6 @@ const {
   postReadings,
   getReadings
 } = require('../controllers/readingsController');
-const { handle405s } = require('../errors');
 
-readingsRouter.route('/').post(postReadings).get(getReadings).all(handle405s);
+readingsRouter.route('/').post(postReadings).get(getReadings);
 module.exports = readingsRouter;

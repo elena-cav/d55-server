@@ -1,6 +1,7 @@
 const dbConnection = require('../db/dbConnection');
 
 exports.checkAccountExists = ({ account_id }) => {
+  console.log('in hereee');
   return dbConnection
     .select('*')
     .from('accounts')
@@ -24,7 +25,6 @@ exports.fetchAccounts = ({ sort_by, order }) => {
 
 exports.updateAccount = (input, { account_id }) => {
   const { email, first_name, surname } = input;
-  console.log(first_name);
 
   const validInput = (key) =>
     key === 'email' ||
@@ -47,17 +47,9 @@ exports.updateAccount = (input, { account_id }) => {
     .select('*')
     .from('accounts')
     .where({ account_id })
+    .update({ email, first_name, surname })
     .returning('*')
     .then(([account]) => {
-      if (email) {
-        account.email = email;
-      }
-      if (first_name) {
-        account.first_name = first_name;
-      }
-      if (surname) {
-        account.surname = surname;
-      }
       return account;
     });
 };
