@@ -12,9 +12,9 @@ exports.postReadings = (req, res, next) => {
     .catch((err) => next(err));
 };
 exports.getReadings = (req, res, next) => {
-  fetchReadings()
+  fetchReadings(req.query)
     .then((readings) => {
-      res.status(200).send(readings);
+      res.status(200).send({ readings });
     })
     .catch((err) => next(err));
 };

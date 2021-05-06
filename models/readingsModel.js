@@ -1,5 +1,5 @@
 const dbConnection = require('../db/dbConnection');
-
+const { getValidAndInvalid } = require('../utils/utils');
 exports.validateKeys = ([body]) => {
   if (
     body.data[0] !== 'meter_reading_id' ||
@@ -18,69 +18,25 @@ exports.sendReadings = (readings) => {
     .select('*')
     .from('accounts')
     .then((accounts) => {
-      const invalid = [];
+      const { invalid, valid } = getValidAndInvalid(readings, accounts);
 
-      const validId = readings.filter(({ data }) => {
-        const isValid = accounts.find(
-          ({ account_id }) => account_id === data[1]
-        );
-        if (!isValid) invalid.push(data);
-        return isValid;
-      });
-
-      const unique = validId.filter((item, index, array) => {
-        const single =
-          array.map((mapItem) => mapItem.data[0]).indexOf(item.data[0]) ===
-          index;
-        if (!single) invalid.push(item.data);
-        return single;
-      });
-
-      const validReading = unique.filter(({ data }) => {
-        const validReading = /^\d{4}$/g.test(data[2]);
-        if (!validReading) {
-          invalid.push(data);
-        }
-        return validReading;
-      });
-
-      const validFormatted = validReading.map(({ data }) => {
-        return {
-          meter_reading_id: data[0],
-          account_id: data[1],
-          reading: parseInt(data[2])
-        };
-      });
-      const invalidFormatted = invalid
-        .filter((data, index) => {
-          return index !== 0;
-        })
-        .map((data) => {
+      return dbConnection('readings')
+        .insert(valid)
+        .onConflict('meter_reading_id')
+        .ignore()
+        .then(() => {
           return {
-            meter_reading_id: data[0],
-            account_id: data[1],
-            reading: parseInt(data[2])
+            validSubmissions: valid,
+            invalidSubmissions: invalid
           };
         });
-      return (
-        dbConnection('readings')
-          .insert(validFormatted)
-          // .onConflict('meter_reading_id')
-          // .ignore()
-          .then(() => {
-            return {
-              validSubmissions: validFormatted,
-              invalidSubmissions: invalidFormatted
-            };
-          })
-      );
     })
     .catch((err) => console.log(err));
 };
 
-exports.fetchReadings = () => {
+exports.fetchReadings = ({ sort_by, order }) => {
   return dbConnection
     .select('*')
     .from('readings')
-    .catch((err) => console.log(err));
+    .orderBy(sort_by || 'meter_reading_id', order || 'asc');
 };
