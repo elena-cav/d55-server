@@ -1,11 +1,11 @@
 const express = require('express');
-// var cors = require('cors');
+var cors = require('cors');
 
 const app = express();
 const apiRouter = require('./routers/apiRouter.js');
 
 const { handleCustomErrors, handle400s, handle500s } = require('./errors');
-// app.use(cors());
+app.use(cors());
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');

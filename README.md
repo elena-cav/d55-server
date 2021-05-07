@@ -2,11 +2,21 @@
 
 ### Hosted API: https://d55-ec-test.herokuapp.com/
 
+### Frontend Repo: https://github.com/elena-cav/d55-client
+
 ### Hosted frontend: https://d55-test.netlify.app/
 
 This is an API built for an Energy Company Account Manager, serving as a tool to upload a CSV file of Customer Meter Readings and monitor the customers' energy consumption.
 
-Built using
+## Validation
+
+Entries will not be accepted if:
+
+- they are duplicate
+- they are not associated with an Account ID to be deemed valid
+- reading values are not in the format NNNN
+
+## Built using
 
 - Node.js (15.8.0)
 - PG (v ^8.5.1")
